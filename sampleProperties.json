@@ -1,0 +1,15 @@
+{
+  "type": "DBMongo",
+  "id": "mymongo",
+  "properties": {
+    "db": "mydatabase",
+    "url": "mongodb://host:27017",
+    "credentials": {
+      "dbAuth": false,
+      "user": "myuser",
+      "passwd": "mypassword"
+    }
+  },
+  "logLevel": "none",
+  "timeout": 60000
+}

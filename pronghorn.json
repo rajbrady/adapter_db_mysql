@@ -1,0 +1,123 @@
+{
+  "id": "@itentialopensource/adapter-db_mysql",
+  "type": "Adapter",
+  "export": "MySQL",
+  "displayName": "MySQL",
+  "title": "MySQL",
+  "src": "adapter.js",
+  "roles": [
+      "admin"
+  ],
+  "methods": [
+    {
+      "name": "query",
+      "summary": "",
+      "description": "",
+      "input": [
+        {
+          "name": "sql",
+          "type": "string",
+          "info": "",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "object",
+        "description": "A JSON Object containing status, code and the result"
+      },
+      "roles": [
+        "admin"
+      ],
+      "task": true
+    },
+    {
+      "name": "select",
+      "summary": "",
+      "description": "",
+      "input": [
+        {
+          "name": "sql",
+          "type": "string",
+          "info": "",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "object",
+        "description": "A JSON Object containing status, code and the result"
+      },
+      "roles": [
+        "admin"
+      ],
+      "task": true
+    },
+    {
+      "name": "insert",
+      "summary": "",
+      "description": "",
+      "input": [
+        {
+          "name": "sql",
+          "type": "string",
+          "info": "",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "object",
+        "description": "A JSON Object containing status, code and the result"
+      },
+      "roles": [
+        "admin"
+      ],
+      "task": true
+    },
+    {
+      "name": "update",
+      "summary": "",
+      "description": "",
+      "input": [
+        {
+          "name": "sql",
+          "type": "string",
+          "info": "",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "object",
+        "description": "A JSON Object containing status, code and the result"
+      },
+      "roles": [
+        "admin"
+      ],
+      "task": true
+    },
+    {
+      "name": "delete",
+      "summary": "Find count of items from the collection in the database",
+      "description": "Find count of items from the collection in the database",
+      "input": [
+        {
+          "name": "sql",
+          "type": "string",
+          "info": "",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "object",
+        "description": "A JSON Object containing status, code and the result"
+      },
+      "roles": [
+        "admin"
+      ],
+      "task": true
+    }
+  ]
+}
