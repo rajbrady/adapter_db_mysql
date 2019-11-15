@@ -40,7 +40,7 @@
   "dependencies": {
     "ajv": "^6.10.0",
     "fs-extra": "^7.0.0",
-    "mysql": "^2.16.0",
+    "mysql": "^2.17.1",
     "package-json-validator": "^0.6.3",
     "readline-sync": "^1.4.9",
     "uuid": "^3.0.1"

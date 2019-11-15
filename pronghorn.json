@@ -11,8 +11,30 @@
   "methods": [
     {
       "name": "query",
-      "summary": "",
-      "description": "",
+      "summary": "query the MySQL server.",
+      "description": "query the MySQL server.",
+      "input": [
+        {
+          "name": "sql",
+          "type": "string",
+          "info": "",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "object",
+        "description": "A JSON Object containing status, code and the result"
+      },
+      "roles": [
+        "admin"
+      ],
+      "task": true
+    },
+    {
+      "name": "create",
+      "summary": "create a table into MySQL server.",
+      "description": "create a table into MySQL server.",
       "input": [
         {
           "name": "sql",
@@ -33,8 +55,8 @@
     },
     {
       "name": "select",
-      "summary": "",
-      "description": "",
+      "summary": "select item from MySQL server",
+      "description": "select item from MySQL server",
       "input": [
         {
           "name": "sql",
@@ -55,8 +77,8 @@
     },
     {
       "name": "insert",
-      "summary": "",
-      "description": "",
+      "summary": "insert item into MySQL server.",
+      "description": "insert item into MySQL server.",
       "input": [
         {
           "name": "sql",
@@ -77,8 +99,8 @@
     },
     {
       "name": "update",
-      "summary": "",
-      "description": "",
+      "summary": "update item into MySQL server.",
+      "description": "update item into MySQL server.",
       "input": [
         {
           "name": "sql",
@@ -99,8 +121,8 @@
     },
     {
       "name": "delete",
-      "summary": "Find count of items from the collection in the database",
-      "description": "Find count of items from the collection in the database",
+      "summary": "delete item from MySQL server.",
+      "description": "delete item from MySQL server.",
       "input": [
         {
           "name": "sql",
