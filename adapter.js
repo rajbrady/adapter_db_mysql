@@ -171,7 +171,7 @@ class MySQL extends EventEmitter {
     log.trace(origin);
 
     try {
-      // verify that we are connected to Mongo
+      // verify that we are connected to MySQL
       if (!this.alive || !this.connection) {
         log.error('Error during healthcheck: Not connected to MySQL Database');
         return callback({
@@ -180,7 +180,7 @@ class MySQL extends EventEmitter {
         });
       }
 
-      this.connection.query('SELECT test;', (error, results, fields) => {
+      this.connection.query('SELECT "test";', (error, results, fields) => {
         if (error) {
           log.error(`Error during healthcheck: ${error}`);
           return callback({
@@ -264,13 +264,20 @@ class MySQL extends EventEmitter {
     log.trace(origin);
     log.trace(`mysql query started with sql: ${sql}`);
     try {
+      // verify the required data has been provided
+      if (!sql) {
+        const errorObj = formatErrorObject(origin, 'Missing Data', ['sql'], null, null, null);
+        log.error(`${origin}: ${errorObj.IAPerror.displayString}`);
+        return callback(null, errorObj);
+      }
+
       // query connection
       this.connection.query(sql, (error, results, fields) => {
         // close connection
         // this.connection.end();
 
         log.debug(`result from query: ${JSON.stringify(results)}`);
-        log.error(`result from query: ${JSON.stringify(fields)}`);
+        log.debug(`result from query: ${JSON.stringify(fields)}`);
 
         if (error) {
           const errorObj = formatErrorObject(origin, 'Database Error', [error], null, null, null);
@@ -437,6 +444,36 @@ class MySQL extends EventEmitter {
       }
       if (!sql.toLowerCase().startsWith('delete')) {
         return callback(null, 'SQL statement must start with "DELETE"');
+      }
+
+      this.query(sql, callback);
+    } catch (ex) {
+      const errorObj = formatErrorObject(origin, 'Caught Exception', null, null, null, ex);
+      log.error(`${origin}: ${errorObj.IAPerror.displayString}`);
+      return callback(null, errorObj);
+    }
+  }
+
+  /**
+   * Call to drop table from MySQL server.
+   * @function drop
+   * @param sql - a sql string (required)
+   * @param callback - a callback function to return a result
+   */
+  drop(sql, callback) {
+    const meth = 'adapter-drop';
+    const origin = `${this.id}-${meth}`;
+    log.trace(origin);
+    log.trace(`mysql drop started with sql: ${sql}`);
+    try {
+      // verify the required data has been provided
+      if (!sql) {
+        const errorObj = formatErrorObject(origin, 'Missing Data', ['sql'], null, null, null);
+        log.error(`${origin}: ${errorObj.IAPerror.displayString}`);
+        return callback(null, errorObj);
+      }
+      if (!sql.toLowerCase().startsWith('drop')) {
+        return callback(null, 'SQL statement must start with "DROP"');
       }
 
       this.query(sql, callback);

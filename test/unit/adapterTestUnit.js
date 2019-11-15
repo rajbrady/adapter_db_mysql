@@ -42,17 +42,15 @@ global.pronghornProps = {
   },
   adapterProps: {
     adapters: [{
-      id: 'Test-db_mongo',
-      type: 'DBMongo',
+      id: 'Test-db_mysql',
+      type: 'MySQL',
       properties: {
-        db: 'mydatabase',
-        url: 'myurl',
+        database: 'mydatabase',
         host,
         port,
         credentials: {
-          dbAuth: 'request_token',
-          user: username,
-          passwd: password
+          username,
+          password
         },
         ssl: {
           enabled: sslenable,
@@ -125,7 +123,7 @@ function runErrorAsserts(data, error, code, origin, displayStr) {
 
 
 // require the adapter that we are going to be using
-const Mongo = require('../../adapter.js');
+const MySQL = require('../../adapter.js');
 
 // delete the .DS_Store directory in entities -- otherwise this will cause errors
 const dirPath = path.join(__dirname, '../../entities/.DS_Store');
@@ -139,9 +137,9 @@ if (fs.existsSync(dirPath)) {
 }
 
 // begin the testing - these should be pretty well defined between the describe and the it!
-describe('[unit] Mongo Adapter Test', () => {
-  describe('Mongo Class Tests', () => {
-    const a = new Mongo(
+describe('[unit] MySQL Adapter Test', () => {
+  describe('MySQL Class Tests', () => {
+    const a = new MySQL(
       pronghornProps.adapterProps.adapters[0].id,
       pronghornProps.adapterProps.adapters[0].properties
     );
@@ -209,7 +207,7 @@ describe('[unit] Mongo Adapter Test', () => {
       });
       it('package.json should be customized', (done) => {
         const packageDotJson = require('../../package.json');
-        assert.notEqual(-1, packageDotJson.name.indexOf('db_mongo'));
+        assert.notEqual(-1, packageDotJson.name.indexOf('db_mysql'));
         assert.notEqual(undefined, packageDotJson.version);
         assert.notEqual(null, packageDotJson.version);
         assert.notEqual('', packageDotJson.version);
@@ -226,10 +224,10 @@ describe('[unit] Mongo Adapter Test', () => {
       });
       it('pronghorn.json should be customized', (done) => {
         const pronghornDotJson = require('../../pronghorn.json');
-        assert.notEqual(-1, pronghornDotJson.id.indexOf('db_mongo'));
-        assert.equal('DBMongo', pronghornDotJson.export);
-        assert.equal('DBMongo', pronghornDotJson.displayName);
-        assert.equal('DBMongo', pronghornDotJson.title);
+        assert.notEqual(-1, pronghornDotJson.id.indexOf('db_mysql'));
+        assert.equal('MySQL', pronghornDotJson.export);
+        assert.equal('MySQL', pronghornDotJson.displayName);
+        assert.equal('MySQL', pronghornDotJson.title);
         done();
       });
       it('pronghorn.json should only expose workflow functions', (done) => {
@@ -347,7 +345,7 @@ describe('[unit] Mongo Adapter Test', () => {
       });
       it('propertiesSchema.json should be customized', (done) => {
         const propertiesDotJson = require('../../propertiesSchema.json');
-        assert.equal('adapter-db_mongo', propertiesDotJson.$id);
+        assert.equal('adapter-db_mysql', propertiesDotJson.$id);
         done();
       });
     });
@@ -402,133 +400,17 @@ describe('[unit] Mongo Adapter Test', () => {
     -----------------------------------------------------------------------
     */
 
-    describe('#create - errors', () => {
-      it('should have a create function', (done) => {
-        assert.equal(true, typeof a.create === 'function');
-        done();
-      });
-      it('should error on create - no collection', (done) => {
-        try {
-          a.create(null, null, (data, error) => {
-            try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-create', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on create - no data', (done) => {
-        try {
-          a.create('fake', null, (data, error) => {
-            try {
-              const displayE = 'data is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-create', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-    });
-
-    describe('#createMany - errors', () => {
-      it('should have a createMany function', (done) => {
-        assert.equal(true, typeof a.createMany === 'function');
-        done();
-      });
-      it('should error on createMany - no collection', (done) => {
-        try {
-          a.createMany(null, null, false, null, (data, error) => {
-            try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-createMany', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on createMany - no data', (done) => {
-        try {
-          a.createMany('fake', null, false, null, (data, error) => {
-            try {
-              const displayE = 'data is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-createMany', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on createMany - data not array', (done) => {
-        try {
-          a.createMany('fake', 'fake', false, null, (data, error) => {
-            try {
-              const displayE = 'Invalid data format - data must be an array';
-              runErrorAsserts(data, error, 'AD.999', 'Test-db_mongo-adapter-createMany', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-    });
-
     describe('#query - errors', () => {
       it('should have a query function', (done) => {
         assert.equal(true, typeof a.query === 'function');
         done();
       });
-      it('should error on query - no queryDoc', (done) => {
+      it('should error on query - no sql string', (done) => {
         try {
           a.query(null, (data, error) => {
             try {
-              const displayE = 'queryDoc is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-query', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on query - query collection', (done) => {
-        try {
-          a.query({ fake: 'fake' }, (data, error) => {
-            try {
-              const displayE = 'queryDoc.collection is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-query', displayE);
+              const displayE = 'sql is required';
+              runErrorAsserts(data, error, 'AD.300', 'Test-db_mysql-adapter-query', displayE);
               done();
             } catch (ex) {
               log.error(`Test Failure: ${ex}`);
@@ -542,34 +424,17 @@ describe('[unit] Mongo Adapter Test', () => {
       }).timeout(attemptTimeout);
     });
 
-    describe('#find - errors', () => {
-      it('should have a find function', (done) => {
-        assert.equal(true, typeof a.find === 'function');
+    describe('#create - errors', () => {
+      it('should have a create function', (done) => {
+        assert.equal(true, typeof a.create === 'function');
         done();
       });
-      it('should error on find - no options', (done) => {
+      it('should error on create - no sql string', (done) => {
         try {
-          a.find(null, (data, error) => {
+          a.create(null, (data, error) => {
             try {
-              const displayE = 'options is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-find', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on find - options entity', (done) => {
-        try {
-          a.find({ fake: 'fake' }, (data, error) => {
-            try {
-              const displayE = 'options.entity is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-find', displayE);
+              const displayE = 'sql is required';
+              runErrorAsserts(data, error, 'AD.300', 'Test-db_mysql-adapter-create', displayE);
               done();
             } catch (ex) {
               log.error(`Test Failure: ${ex}`);
@@ -583,17 +448,17 @@ describe('[unit] Mongo Adapter Test', () => {
       }).timeout(attemptTimeout);
     });
 
-    describe('#count - errors', () => {
-      it('should have a count function', (done) => {
-        assert.equal(true, typeof a.count === 'function');
+    describe('#select - errors', () => {
+      it('should have a select function', (done) => {
+        assert.equal(true, typeof a.select === 'function');
         done();
       });
-      it('should error on count - no collection', (done) => {
+      it('should error on select - no sql string', (done) => {
         try {
-          a.count(null, null, (data, error) => {
+          a.select(null, (data, error) => {
             try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-aggregate', displayE);
+              const displayE = 'sql is required';
+              runErrorAsserts(data, error, 'AD.300', 'Test-db_mysql-adapter-select', displayE);
               done();
             } catch (ex) {
               log.error(`Test Failure: ${ex}`);
@@ -607,34 +472,17 @@ describe('[unit] Mongo Adapter Test', () => {
       }).timeout(attemptTimeout);
     });
 
-    describe('#aggregate - errors', () => {
-      it('should have a aggregate function', (done) => {
-        assert.equal(true, typeof a.aggregate === 'function');
+    describe('#insert - errors', () => {
+      it('should have a insert function', (done) => {
+        assert.equal(true, typeof a.insert === 'function');
         done();
       });
-      it('should error on aggregate - no collection', (done) => {
+      it('should error on insert - no sql string', (done) => {
         try {
-          a.aggregate(null, null, (data, error) => {
+          a.insert(null, (data, error) => {
             try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-aggregate', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on aggregate - no aggregation', (done) => {
-        try {
-          a.aggregate('fake', null, (data, error) => {
-            try {
-              const displayE = 'aggregations is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-aggregate', displayE);
+              const displayE = 'sql is required';
+              runErrorAsserts(data, error, 'AD.300', 'Test-db_mysql-adapter-insert', displayE);
               done();
             } catch (ex) {
               log.error(`Test Failure: ${ex}`);
@@ -648,17 +496,17 @@ describe('[unit] Mongo Adapter Test', () => {
       }).timeout(attemptTimeout);
     });
 
-    describe('#search - errors', () => {
-      it('should have a search function', (done) => {
-        assert.equal(true, typeof a.search === 'function');
+    describe('#update - errors', () => {
+      it('should have a update function', (done) => {
+        assert.equal(true, typeof a.update === 'function');
         done();
       });
-      it('should error on search - no collection', (done) => {
+      it('should error on update - no sql string', (done) => {
         try {
-          a.search(null, null, (data, error) => {
+          a.update(null, (data, error) => {
             try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-search', displayE);
+              const displayE = 'sql is required';
+              runErrorAsserts(data, error, 'AD.300', 'Test-db_mysql-adapter-update', displayE);
               done();
             } catch (ex) {
               log.error(`Test Failure: ${ex}`);
@@ -672,34 +520,17 @@ describe('[unit] Mongo Adapter Test', () => {
       }).timeout(attemptTimeout);
     });
 
-    describe('#distinct - errors', () => {
-      it('should have a distinct function', (done) => {
-        assert.equal(true, typeof a.distinct === 'function');
+    describe('#delete - errors', () => {
+      it('should have a delete function', (done) => {
+        assert.equal(true, typeof a.delete === 'function');
         done();
       });
-      it('should error on distinct - no collection', (done) => {
+      it('should error on delete - no sql string', (done) => {
         try {
-          a.distinct(null, null, null, null, (data, error) => {
+          a.delete(null, (data, error) => {
             try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-distinct', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on distinct - no field', (done) => {
-        try {
-          a.distinct('fake', null, null, null, (data, error) => {
-            try {
-              const displayE = 'field is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-distinct', displayE);
+              const displayE = 'sql is required';
+              runErrorAsserts(data, error, 'AD.300', 'Test-db_mysql-adapter-delete', displayE);
               done();
             } catch (ex) {
               log.error(`Test Failure: ${ex}`);
@@ -713,328 +544,17 @@ describe('[unit] Mongo Adapter Test', () => {
       }).timeout(attemptTimeout);
     });
 
-    describe('#exists - errors', () => {
-      it('should have a exists function', (done) => {
-        assert.equal(true, typeof a.exists === 'function');
+    describe('#drop - errors', () => {
+      it('should have a drop function', (done) => {
+        assert.equal(true, typeof a.drop === 'function');
         done();
       });
-      it('should error on exists - no collection', (done) => {
+      it('should error on drop - no sql string', (done) => {
         try {
-          a.exists(null, null, (data, error) => {
+          a.drop(null, (data, error) => {
             try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-aggregate', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-    });
-
-    describe('#filterFields - errors', () => {
-      it('should have a filterFields function', (done) => {
-        assert.equal(true, typeof a.filterFields === 'function');
-        done();
-      });
-      it('should error on filterFields - no collection', (done) => {
-        try {
-          a.filterFields(null, null, null, (data, error) => {
-            try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-filterFields', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-    });
-
-    describe('#sortQuery - errors', () => {
-      it('should have a sortQuery function', (done) => {
-        assert.equal(true, typeof a.sortQuery === 'function');
-        done();
-      });
-      it('should error on sortQuery - no queryDoc', (done) => {
-        try {
-          a.sortQuery(null, (data, error) => {
-            try {
-              const displayE = 'queryDoc is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-sortQuery', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on sortQuery - query collection', (done) => {
-        try {
-          a.sortQuery({ fake: 'fake' }, (data, error) => {
-            try {
-              const displayE = 'queryDoc.collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-sortQuery', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-    });
-
-    describe('#searchById - errors', () => {
-      it('should have a searchById function', (done) => {
-        assert.equal(true, typeof a.searchById === 'function');
-        done();
-      });
-      it('should error on searchById - no collection', (done) => {
-        try {
-          a.searchById(null, null, (data, error) => {
-            try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-searchById', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on searchById - no id', (done) => {
-        try {
-          a.searchById('fake', null, (data, error) => {
-            try {
-              const displayE = 'id is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-searchById', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-    });
-
-    describe('#save - errors', () => {
-      it('should have a save function', (done) => {
-        assert.equal(true, typeof a.save === 'function');
-        done();
-      });
-      it('should error on save - no collection', (done) => {
-        try {
-          a.save(null, null, null, (data, error) => {
-            try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-save', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on save - no id', (done) => {
-        try {
-          a.save('fake', null, null, (data, error) => {
-            try {
-              const displayE = 'id is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-save', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on save - no data', (done) => {
-        try {
-          a.save('fake', 'fake', null, (data, error) => {
-            try {
-              const displayE = 'data is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-save', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-    });
-
-    describe('#updateSearched - errors', () => {
-      it('should have a updateSearched function', (done) => {
-        assert.equal(true, typeof a.updateSearched === 'function');
-        done();
-      });
-      it('should error on updateSearched - no collection', (done) => {
-        try {
-          a.updateSearched(null, null, null, false, false, (data, error) => {
-            try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-updateSearched', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on updateSearched - no data', (done) => {
-        try {
-          a.updateSearched('fake', null, null, false, false, (data, error) => {
-            try {
-              const displayE = 'data is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-updateSearched', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-    });
-
-    describe('#findAndModify - errors', () => {
-      it('should have a findAndModify function', (done) => {
-        assert.equal(true, typeof a.findAndModify === 'function');
-        done();
-      });
-      it('should error on findAndModify - no collection', (done) => {
-        try {
-          a.findAndModify(null, null, null, null, false, false, (data, error) => {
-            try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-findAndModify', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on findAndModify - no data', (done) => {
-        try {
-          a.findAndModify('fake', null, null, null, false, false, (data, error) => {
-            try {
-              const displayE = 'data is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-findAndModify', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-    });
-
-    describe('#deleteById - errors', () => {
-      it('should have a deleteById function', (done) => {
-        assert.equal(true, typeof a.deleteById === 'function');
-        done();
-      });
-      it('should error on deleteById - no collection', (done) => {
-        try {
-          a.deleteById(null, null, (data, error) => {
-            try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-deleteById', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-      it('should error on deleteById - no id', (done) => {
-        try {
-          a.deleteById('fake', null, (data, error) => {
-            try {
-              const displayE = 'id is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-deleteById', displayE);
-              done();
-            } catch (ex) {
-              log.error(`Test Failure: ${ex}`);
-              done(ex);
-            }
-          });
-        } catch (exc) {
-          log.error(`Adapter Exception: ${exc}`);
-          done(exc);
-        }
-      }).timeout(attemptTimeout);
-    });
-
-    describe('#deleteSearched - errors', () => {
-      it('should have a deleteSearched function', (done) => {
-        assert.equal(true, typeof a.deleteSearched === 'function');
-        done();
-      });
-      it('should error on deleteSearched - no collection', (done) => {
-        try {
-          a.deleteSearched(null, null, (data, error) => {
-            try {
-              const displayE = 'collectionName is required';
-              runErrorAsserts(data, error, 'AD.300', 'Test-db_mongo-adapter-deleteSearched', displayE);
+              const displayE = 'sql is required';
+              runErrorAsserts(data, error, 'AD.300', 'Test-db_mysql-adapter-drop', displayE);
               done();
             } catch (ex) {
               log.error(`Test Failure: ${ex}`);

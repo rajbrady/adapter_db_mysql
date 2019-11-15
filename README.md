@@ -1,7 +1,7 @@
-SQL Adapter
+MySQL Adapter
 ===========
 
-This adapter allows interaction with a sql. For more
+This adapter allows interaction with a MySQL server. For more
 information on this adapter, check its [documentation](docs/DOCUMENTATION.md).
 
 License & Maintainers

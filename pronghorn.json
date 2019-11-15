@@ -140,6 +140,28 @@
         "admin"
       ],
       "task": true
+    },
+    {
+      "name": "drop",
+      "summary": "drop table from MySQL server.",
+      "description": "drop table from MySQL server.",
+      "input": [
+        {
+          "name": "sql",
+          "type": "string",
+          "info": "",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "object",
+        "description": "A JSON Object containing status, code and the result"
+      },
+      "roles": [
+        "admin"
+      ],
+      "task": true
     }
   ]
 }
