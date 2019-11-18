@@ -1,5 +1,5 @@
 {
-  "id": "@clinkConsumer/adapter-db_mysql",
+  "id": "@itentialopensource/adapter-db_mysql",
   "type": "Adapter",
   "export": "MySQL",
   "displayName": "MySQL",
