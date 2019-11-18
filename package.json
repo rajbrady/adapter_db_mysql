@@ -3,8 +3,8 @@
   "version": "0.1.2",
   "description": "Itential adapter to connect to mysql",
   "main": "adapter.js",
-  "wizardVersion": "2.32.1",
-  "engineVersion": "1.30.0",
+  "wizardVersion": "2.41.0",
+  "engineVersion": "1.44.2",
   "scripts": {
     "artifactize": "npm i && node utils/packModificationScript.js",
     "preinstall": "node utils/setup.js",
@@ -24,7 +24,7 @@
     "App-Artifacts",
     "Adapter",
     "Persistence",
-    "Mongo",
+    "MySQL",
     "Pre-Release"
   ],
   "license": "Apache-2.0",
@@ -36,7 +36,7 @@
     "url": "git@gitlab.com:itentialopensource/adapters/persistence/adapter-db_mysql.git"
   },
   "author": "Itential",
-  "homepage": "https://gitlab.com:itentialopensource/adapters/persistence/adapter-db_mysql#readme",
+  "homepage": "https://gitlab.com/itentialopensource/adapters/persistence/adapter-db_mysql#readme",
   "dependencies": {
     "ajv": "^6.10.0",
     "fs-extra": "^7.0.0",

@@ -15,7 +15,7 @@ set -e
 printf "%b" "Running pre-commit hooks...\\n"
 
 # verify testing script is stubbed and no credentials
-# node utils/testRunner.js -r
+#node utils/testRunner.js -r
 
 # security audit on the code
 npm audit --registry=https://registry.npmjs.org
