@@ -1,0 +1,65 @@
+{
+  "$id": "adapter-db_mysql",
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "database": {
+      "type": "string",
+      "description": "The name of the database",
+      "default": "test",
+      "examples": [
+        "test"
+      ]
+    },
+    "host": {
+      "type": "string",
+      "description": "Host where the Mongo database resides.",
+      "default": "localhost",
+      "examples": [
+        "localhost"
+      ]
+    },
+    "port": {
+      "type": "integer",
+      "description": "Port to be used to connect to Mongo.",
+      "default": 27017,
+      "minimum": 1,
+      "maximum": 65535
+    },
+    "authentication": {
+      "$ref":"#/definitions/authentication"
+    }
+  },
+  "required" : ["database","host","port"],
+  "definitions": {
+    "authentication": {
+      "$id": "/authentication",
+      "type": "object",
+      "properties": {
+        "dbAuth" : {
+            "$id" : "/credentials/properties/dbAuth",
+            "type" : "boolean",
+            "description": "whether or not to use user authentication to connect to mongo",
+            "default" : false
+        },
+        "password": {
+          "type": "string",
+          "description": "Password used when authentication is enabled.",
+          "default": "pronghorn",
+          "examples": [
+            "itentialPassword"
+          ]
+        },
+        "username": {
+          "type": "string",
+          "description": "Username used when authentication is enabled.",
+          "default": "pronghorn",
+          "examples": [
+            "itentialUser"
+          ]
+        }
+      },
+      "required" : ["username","password"]
+    }
+  }
+}
