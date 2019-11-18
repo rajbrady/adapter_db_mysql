@@ -1,4 +1,12 @@
 
+## 0.1.3 [11-18-2019]
+
+* Bug fixes and performance improvements
+
+See commit c35688d
+
+---
+
 ## 0.1.2 [08-13-2019]
 
 * Added mongo services
