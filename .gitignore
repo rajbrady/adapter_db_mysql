@@ -1,6 +1,8 @@
-.backup
 .nyc_output
 coverage
 node_modules
-nohup.out
 npm-debug.log
+test/**/*_Results.txt
+.DS_Store
+utils/backup
+build/workspace/**

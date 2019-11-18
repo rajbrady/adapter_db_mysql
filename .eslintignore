@@ -1,4 +1,7 @@
+out/*
+coverage/*
 .nyc_output/*
 backup/*
-coverage/*
-out/*
+test/*
+utils/*
+views/*

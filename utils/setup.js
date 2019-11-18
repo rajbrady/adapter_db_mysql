@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* @copyright Itential, LLC 2019 */
 
 const fs = require('fs');
 
@@ -15,6 +14,7 @@ fs.stat('.git', (err) => {
   if (err == null) {
     // git repo, not an npm repo.
     // add pre-commit hook if it doesn't exist
+    console.log('Adding pre-commit hooks');
     fs.stat('.git/hooks/pre-commit', (statErr) => {
       if (statErr == null || statErr.code === 'ENOENT') {
         fs.writeFile('.git/hooks/pre-commit', precommit, {
