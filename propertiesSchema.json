@@ -13,7 +13,7 @@
     },
     "host": {
       "type": "string",
-      "description": "Host where the Mongo database resides.",
+      "description": "Host where the MySQL database resides.",
       "default": "localhost",
       "examples": [
         "localhost"
@@ -21,7 +21,7 @@
     },
     "port": {
       "type": "integer",
-      "description": "Port to be used to connect to Mongo.",
+      "description": "Port to be used to connect to MySQL.",
       "default": 27017,
       "minimum": 1,
       "maximum": 65535
