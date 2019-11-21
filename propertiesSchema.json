@@ -39,7 +39,7 @@
         "dbAuth" : {
             "$id" : "/credentials/properties/dbAuth",
             "type" : "boolean",
-            "description": "whether or not to use user authentication to connect to mongo",
+            "description": "whether or not to use user authentication to connect to mysql",
             "default" : false
         },
         "password": {
