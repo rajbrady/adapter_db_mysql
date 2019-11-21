@@ -1,6 +1,6 @@
 {
   "name": "@itentialopensource/adapter-db_mysql",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Itential adapter to connect to mysql",
   "main": "adapter.js",
   "wizardVersion": "2.41.0",

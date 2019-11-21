@@ -1,4 +1,12 @@
 
+## 0.1.6 [11-21-2019]
+
+* Bug fixes and performance improvements
+
+See commit 469d9ab
+
+---
+
 ## 0.1.5 [11-21-2019]
 
 * Bug fixes and performance improvements
