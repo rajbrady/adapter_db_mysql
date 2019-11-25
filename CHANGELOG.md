@@ -1,4 +1,12 @@
 
+## 0.1.7 [11-25-2019]
+
+* improve README.
+
+See merge request itentialopensource/adapters/persistence/adapter-db_mysql!1
+
+---
+
 ## 0.1.6 [11-21-2019]
 
 * Bug fixes and performance improvements
