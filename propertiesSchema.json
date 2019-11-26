@@ -28,6 +28,9 @@
     },
     "authentication": {
       "$ref":"#/definitions/authentication"
+    },
+    "ssl": {
+      "$ref":"#/definitions/ssl"
     }
   },
   "required" : ["database","host","port"],
@@ -60,6 +63,47 @@
         }
       },
       "required" : ["username","password"]
+    },
+    "ssl": {
+      "$id": "/ssl",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "$id": "/ssl/properties/enabled",
+          "type": "boolean",
+          "description": "Whether or not ssl is enabled on PostgreSQL",
+          "default": false            
+        },
+        "accept_invalid_cert": {
+          "$id": "/ssl/properties/accept_invalid_cert",
+          "type": "boolean",
+          "description": "Whether IAP should be configured to accept invalid certificates",
+          "default": false
+        },
+        "ca_file": {
+          "$id": "/ssl/properties/ca_file",
+          "type": "string",
+          "description": "The fully qualified path name to the CA pem file used for SSL",
+          "default": "",
+          "examples": [
+            "keys/key.pem"
+          ]
+        }
+      },
+      "required" : ["enabled"],
+      "allOf": [
+        {
+          "if" : { "properties" : { "enabled": { "enum": [true] } } },
+          "then" : { "required" : ["acceptInvalidCerts", "checkServerIdentity"] }
+        },
+        {
+          "if" : { "allOf": [ 
+            { "properties" : { "enabled": { "enum": [true] } } },
+            { "properties" : { "acceptInvalidCerts": { "enum": [ false ] } } }
+          ] },
+          "then" : { "required" : ["sslCA"] }
+        }
+      ]
     }
   }
 }

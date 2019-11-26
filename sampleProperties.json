@@ -6,8 +6,13 @@
     "host": "localhost",
     "port": 3306,
     "authentication": {
-        "username": "your username",
-        "password": "your password"
+      "username": "your username",
+      "password": "your password"
+    },
+    "ssl": {
+      "enabled": false,
+      "accept_invalid_cert": true,
+      "ca_file": ""
     }
   },
   "groups": [],

@@ -129,15 +129,60 @@ class MySQL extends EventEmitter {
     const origin = `${this.id}-${meth}`;
     log.trace(origin);
 
-    // get connection
-    this.connection = mysql.createConnection({
+    const config = {
       host: this.props.host,
       port: this.props.port,
       user: this.props.authentication.username,
       password: this.props.authentication.password,
       database: this.props.database,
       acquireTimeout: this.props.acquireTimout || 1000000
-    });
+    };
+
+    if (this.props.ssl) {
+      if (this.props.ssl.enabled === true) {
+        log.info('Connecting to MySQL with SSL.');
+        // validate the server's certificate
+        if (this.props.ssl.accept_invalid_cert === false) {
+          log.info('Certificate based SSL MySQL connections will be used.');
+          config.ssl = {
+            rejectUnauthorized: true
+          };
+          // if validation is enabled, we need to read the CA file
+          if (this.props.ssl.ca_file) {
+            try {
+              config.ssl.ca = fs.readFileSync(this.props.ssl.ca_file);
+            } catch (err) {
+              log.error(`Error: Unable to load MySQL CA file: ${err}`);
+              this.alive = false;
+              this.emit('OFFLINE', {
+                id: this.id
+              });
+              return;
+            }
+          } else {
+            log.error('Error: Certificate validation'
+              + 'is enabled but a CA is not specified.');
+            this.alive = false;
+            this.emit('OFFLINE', {
+              id: this.id
+            });
+            return;
+          }
+        } else {
+          log.info('SSL MySQL connection without CA certificate validation.');
+          config.ssl = {
+            rejectUnauthorized: false
+          };
+        }
+      } else {
+        log.warn('WARNING: Connecting to MySQL without SSL.');
+      }
+    } else {
+      log.warn('WARNING: Connecting to MySQL without SSL.');
+    }
+
+    // get connection
+    this.connection = mysql.createConnection(config);
 
     this.connection.connect((error) => {
       if (error) {
