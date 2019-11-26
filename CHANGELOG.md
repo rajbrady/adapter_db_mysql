@@ -1,4 +1,12 @@
 
+## 0.1.9 [11-26-2019]
+
+* Patch/add ssl
+
+See merge request itentialopensource/adapters/persistence/adapter-db_mysql!3
+
+---
+
 ## 0.1.8 [11-26-2019]
 
 * Patch/add ssl
