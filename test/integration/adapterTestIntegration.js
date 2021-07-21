@@ -1,7 +1,7 @@
 /* @copyright Itential, LLC 2019 (pre-modifications) */
 
 // Set globals
-/* global describe it log pronghornProps */
+/* global pronghornProps */
 /* eslint no-unused-vars: warn */
 /* eslint no-underscore-dangle: warn  */
 
@@ -93,7 +93,7 @@ process.argv.forEach((val) => {
 });
 
 // need to set global logging
-global.log = new (winston.Logger)({
+global.log = winston.createLogger({
   level: logLevel,
   levels: myCustomLevels.levels,
   transports: [
@@ -129,7 +129,7 @@ function runErrorAsserts(data, error, code, origin, displayStr) {
 }
 
 // require the adapter that we are going to be using
-const MySQL = require('../../adapter.js');
+const MySQL = require('../../adapter');
 
 // begin the testing - these should be pretty well defined between the describe and the it!
 describe('[integration] MySQL Adapter Test', () => {

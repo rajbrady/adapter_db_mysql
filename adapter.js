@@ -93,7 +93,6 @@ function formatErrorObject(origin, type, variables, sysCode, sysRes, stack) {
   // return the object
   return errorObject;
 }
-
 class MySQL extends EventEmitter {
   constructor(prongid, properties) {
     log.trace('adapter mysql loading');
@@ -261,7 +260,7 @@ class MySQL extends EventEmitter {
     // find the functions in this class
     do {
       const l = Object.getOwnPropertyNames(obj)
-        .concat(Object.getOwnPropertySymbols(obj).map(s => s.toString()))
+        .concat(Object.getOwnPropertySymbols(obj).map((s) => s.toString()))
         .sort()
         .filter((p, i, arr) => typeof obj[p] === 'function' && p !== 'constructor' && (i === 0 || p !== arr[i - 1]) && myfunctions.indexOf(p) === -1);
       myfunctions = myfunctions.concat(l);
@@ -315,7 +314,15 @@ class MySQL extends EventEmitter {
         log.error(`${origin}: ${errorObj.IAPerror.displayString}`);
         return callback(null, errorObj);
       }
-
+      if (!this.alive || !this.connection) {
+        this.connect();
+        if (!this.alive || !this.connection) {
+          return callback({
+            id: this.id,
+            status: 'fail'
+          });
+        }
+      }
       // query connection
       this.connection.query(sql, (error, results, fields) => {
         // close connection
@@ -354,7 +361,6 @@ class MySQL extends EventEmitter {
     const origin = `${this.id}-${meth}`;
     log.trace(origin);
     log.trace(`mysql create started with sql: ${sql}`);
-
     try {
       // verify the required data has been provided
       if (!sql) {
@@ -362,7 +368,15 @@ class MySQL extends EventEmitter {
         log.error(`${origin}: ${errorObj.IAPerror.displayString}`);
         return callback(null, errorObj);
       }
-
+      if (!this.alive || !this.connection) {
+        this.connect();
+        if (!this.alive || !this.connection) {
+          return callback({
+            id: this.id,
+            status: 'fail'
+          });
+        }
+      }
       if (!sql.toLowerCase().startsWith('create')) {
         return callback(null, 'SQL statement must start with "CREATE"');
       }
@@ -418,7 +432,6 @@ class MySQL extends EventEmitter {
     const origin = `${this.id}-${meth}`;
     log.trace(origin);
     log.trace(`mysql insert started with sql: ${sql}`);
-
     try {
       // verify the required data has been provided
       if (!sql) {
@@ -429,7 +442,15 @@ class MySQL extends EventEmitter {
       if (!sql.toLowerCase().startsWith('insert')) {
         return callback(null, 'SQL statement must start with "INSERT"');
       }
-
+      if (!this.alive || !this.connection) {
+        this.connect();
+        if (!this.alive || !this.connection) {
+          return callback({
+            id: this.id,
+            status: 'fail'
+          });
+        }
+      }
       this.query(sql, callback);
     } catch (ex) {
       const errorObj = formatErrorObject(origin, 'Caught Exception', null, null, null, ex);
@@ -449,7 +470,6 @@ class MySQL extends EventEmitter {
     const origin = `${this.id}-${meth}`;
     log.trace(origin);
     log.trace(`mysql update started with sql: ${sql}`);
-
     try {
       // verify the required data has been provided
       if (!sql) {
@@ -460,7 +480,15 @@ class MySQL extends EventEmitter {
       if (!sql.toLowerCase().startsWith('update')) {
         return callback(null, 'SQL statement must start with "UPDATE"');
       }
-
+      if (!this.alive || !this.connection) {
+        this.connect();
+        if (!this.alive || !this.connection) {
+          return callback({
+            id: this.id,
+            status: 'fail'
+          });
+        }
+      }
       this.query(sql, callback);
     } catch (ex) {
       const errorObj = formatErrorObject(origin, 'Caught Exception', null, null, null, ex);
@@ -480,6 +508,7 @@ class MySQL extends EventEmitter {
     const origin = `${this.id}-${meth}`;
     log.trace(origin);
     log.trace(`mysql delete started with sql: ${sql}`);
+
     try {
       // verify the required data has been provided
       if (!sql) {
@@ -490,7 +519,15 @@ class MySQL extends EventEmitter {
       if (!sql.toLowerCase().startsWith('delete')) {
         return callback(null, 'SQL statement must start with "DELETE"');
       }
-
+      if (!this.alive || !this.connection) {
+        this.connect();
+        if (!this.alive || !this.connection) {
+          return callback({
+            id: this.id,
+            status: 'fail'
+          });
+        }
+      }
       this.query(sql, callback);
     } catch (ex) {
       const errorObj = formatErrorObject(origin, 'Caught Exception', null, null, null, ex);
@@ -520,7 +557,15 @@ class MySQL extends EventEmitter {
       if (!sql.toLowerCase().startsWith('drop')) {
         return callback(null, 'SQL statement must start with "DROP"');
       }
-
+      if (!this.alive || !this.connection) {
+        this.connect();
+        if (!this.alive || !this.connection) {
+          return callback({
+            id: this.id,
+            status: 'fail'
+          });
+        }
+      }
       this.query(sql, callback);
     } catch (ex) {
       const errorObj = formatErrorObject(origin, 'Caught Exception', null, null, null, ex);

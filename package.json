@@ -9,6 +9,7 @@
     "artifactize": "npm i && node utils/packModificationScript.js",
     "preinstall": "node utils/setup.js",
     "lint": "eslint . --ext .json --ext .js",
+    "lint:errors": "node --max_old_space_size=4096 ./node_modules/eslint/bin/eslint.js . --ext .json --ext .js --quiet",
     "test:unit": "mocha test/unit/adapterTestUnit.js --LOG=error",
     "test:integration": "mocha test/integration/adapterTestIntegration.js --LOG=error",
     "test:cover": "nyc --reporter html --reporter text mocha --reporter dot test/*",
@@ -38,23 +39,24 @@
   "author": "Itential",
   "homepage": "https://gitlab.com/itentialopensource/adapters/persistence/adapter-db_mysql#readme",
   "dependencies": {
-    "ajv": "^6.10.0",
-    "fs-extra": "^7.0.0",
+    "ajv": "^6.12.0",
+    "fs-extra": "^8.1.0",
+    "log": "^6.0.0",
     "mysql": "^2.17.1",
-    "package-json-validator": "^0.6.3",
-    "readline-sync": "^1.4.9",
+    "readline-sync": "^1.4.10",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "eslint": "^5.14.1",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-json": "^1.4.0",
-    "mocha": "^5.2.0",
-    "nyc": "^14.1.1",
-    "testdouble": "^3.8.1",
-    "winston": "^2.4.0"
+    "chai": "^4.3.4",
+    "eslint": "^7.29.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-json": "^3.0.0",
+    "mocha": "^9.0.1",
+    "nyc": "^15.1.0",
+    "package-json-validator": "^0.6.3",
+    "testdouble": "^3.16.1",
+    "winston": "^3.3.3"
   },
   "private": false
 }

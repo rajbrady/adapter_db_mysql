@@ -44,7 +44,7 @@ security:
   stage: quality
   script:
     - node_setup
-    - npm audit --registry=https://registry.npmjs.org
+    - npm audit --registry=https://registry.npmjs.org --audit-level=moderate
 
 unit:
   stage: test

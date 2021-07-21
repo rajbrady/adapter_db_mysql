@@ -1,7 +1,7 @@
 /* @copyright Itential, LLC 2019 (pre-modifications) */
 
 // Set globals
-/* global describe it log pronghornProps */
+/* global pronghornProps */
 /* eslint global-require:warn */
 /* eslint no-unused-vars: warn */
 
@@ -97,7 +97,7 @@ process.argv.forEach((val) => {
 });
 
 // need to set global logging
-global.log = new (winston.Logger)({
+global.log = winston.createLogger({
   level: logLevel,
   levels: myCustomLevels.levels,
   transports: [
@@ -121,9 +121,8 @@ function runErrorAsserts(data, error, code, origin, displayStr) {
   assert.equal(displayStr, error.IAPerror.displayString);
 }
 
-
 // require the adapter that we are going to be using
-const MySQL = require('../../adapter.js');
+const MySQL = require('../../adapter');
 
 // delete the .DS_Store directory in entities -- otherwise this will cause errors
 const dirPath = path.join(__dirname, '../../entities/.DS_Store');
